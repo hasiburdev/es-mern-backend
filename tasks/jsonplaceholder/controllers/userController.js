@@ -36,7 +36,16 @@ export const getUser = async (req, res) => {
   res.status(200).json(user);
 };
 export const getUserByQuery = async (req, res) => {
-  const user = await User.findOne({ id: req.query.id }).exec();
+  const user = await User.findOne({ id: req.query.userId }).exec();
   if (!user) res.status(404).json({ message: "User Not Found!" });
   res.status(200).json(user);
+};
+export const createUsers = async (req, res) => {
+  try {
+    await User.insertMany(req.body);
+    res.status(201).json({ message: "Success!" });
+  } catch (error) {
+    console.log(error);
+    res.end();
+  }
 };
