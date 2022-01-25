@@ -1,6 +1,11 @@
 import Post from "../models/postModel.js";
 
 export const getPosts = async (req, res) => {
+  if (req.query.length > 0) {
+    getPostByQuery(req, res);
+    return;
+  }
+
   const posts = await Post.find();
   if (!posts.length) {
     res.status(404).json({ message: "No Post Found!" });
@@ -36,4 +41,13 @@ export const createPosts = async (req, res) => {
     console.log(error);
     res.end;
   }
+};
+
+const getPostByQuery = (req, res) => {
+  const post = await Post.findOne({ id: req.query.postId }).exec();
+  if (!post) {
+    res.status(404).json({ message: "Post Not Found!" });
+    return;
+  }
+  res.status(200).json(post);
 };

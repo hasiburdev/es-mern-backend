@@ -1,7 +1,7 @@
 import User from "../models/userModel.js";
 
 export const getUsers = async (req, res) => {
-  if (req.query.id) {
+  if (req.query.length > 0) {
     getUserByQuery(req, res);
     return;
   }
@@ -32,14 +32,13 @@ export const createUser = async (req, res) => {
 };
 export const getUser = async (req, res) => {
   const user = await User.findOne({ id: req.params.userId }).exec();
-  if (!user) res.status(404).json({ message: "User Not Found!" });
+  if (!user) {
+    res.status(404).json({ message: "User Not Found!" });
+    return;
+  }
   res.status(200).json(user);
 };
-export const getUserByQuery = async (req, res) => {
-  const user = await User.findOne({ id: req.query.userId }).exec();
-  if (!user) res.status(404).json({ message: "User Not Found!" });
-  res.status(200).json(user);
-};
+
 export const createUsers = async (req, res) => {
   try {
     await User.insertMany(req.body);
@@ -48,4 +47,13 @@ export const createUsers = async (req, res) => {
     console.log(error);
     res.end();
   }
+};
+
+const getUserByQuery = async (req, res) => {
+  const user = await User.findOne({ id: req.query.userId }).exec();
+  if (!user) {
+    res.status(404).json({ message: "User Not Found!" });
+    return;
+  }
+  res.status(200).json(user);
 };
