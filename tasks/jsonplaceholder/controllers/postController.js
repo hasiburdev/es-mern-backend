@@ -43,7 +43,7 @@ export const createPosts = async (req, res) => {
   }
 };
 
-const getPostByQuery = (req, res) => {
+const getPostByQuery = async (req, res) => {
   const post = await Post.findOne({ id: req.query.postId }).exec();
   if (!post) {
     res.status(404).json({ message: "Post Not Found!" });

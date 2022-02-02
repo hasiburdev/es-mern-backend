@@ -43,7 +43,7 @@ export const createTodos = async (req, res) => {
   }
 };
 
-const getTodoByQuery = (req, res) => {
+const getTodoByQuery = async (req, res) => {
   const todo = await Todo.findOne({ id: req.query.todoId }).exec();
   if (!todo) {
     res.status(404).json({ message: "Todo Not Found!" });
